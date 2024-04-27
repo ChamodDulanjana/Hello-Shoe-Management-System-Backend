@@ -20,26 +20,43 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public CustomerDTO saveCustomer(CustomerDTO customerDTO) {
-        return mapping.toCustomerDTO(customerDao.save(mapping.customerEntity(customerDTO)));
+        return mapping.toCustomerDTO(customerDao.save(mapping.toCustomerEntity(customerDTO)));
     }
 
     @Override
-    public CustomerDTO getSelectedCustomer(String customerCode) {
+    public CustomerDTO getCustomerById(String customerCode) {
+        var byId = customerDao.findById(customerCode);
+        if (byId.isPresent()) {
+            return mapping.toCustomerDTO(customerDao.getReferenceById(customerCode));
+        }
         return null;
     }
 
     @Override
     public List<CustomerDTO> getAllCustomers() {
-        return List.of();
+        return mapping.toCustomerDTOList(customerDao.findAll());
     }
 
     @Override
     public void deleteCustomer(String customerCode) {
-
+        customerDao.deleteById(customerCode);
     }
 
     @Override
-    public CustomerDTO updateCustomer(CustomerDTO customerDTO, String customerCode) {
-        return null;
+    public void updateCustomer(CustomerDTO customerDTO, String customerCode) {
+        var byId = customerDao.findById(customerCode);
+        if (byId.isPresent()) {
+            byId.get().setCustomerName(customerDTO.getCustomerName());
+            byId.get().setGender(customerDTO.getGender());
+            byId.get().setJoinDate(customerDTO.getJoinDate());
+            byId.get().setLevel(customerDTO.getLevel());
+            byId.get().setTotalPoints(customerDTO.getTotalPoints());
+            byId.get().setDob(customerDTO.getDob());
+            byId.get().setAddressLine1(customerDTO.getAddressLine1());
+            byId.get().setAddressLine2(customerDTO.getAddressLine2());
+            byId.get().setAddressLine3(customerDTO.getAddressLine3());
+            byId.get().setAddressLine4(customerDTO.getAddressLine4());
+            byId.get().setAddressLine5(customerDTO.getAddressLine5());
+        }
     }
 }

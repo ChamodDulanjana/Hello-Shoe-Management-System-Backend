@@ -1,8 +1,7 @@
 package com.chamoddulanjana.helloshoemanagementsystem.service.util;
 
-import com.chamoddulanjana.helloshoemanagementsystem.controller.Customer;
 import com.chamoddulanjana.helloshoemanagementsystem.dto.CustomerDTO;
-import com.chamoddulanjana.helloshoemanagementsystem.entity.CustomerEntity;
+import com.chamoddulanjana.helloshoemanagementsystem.entity.custom.CustomerEntity;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
@@ -19,7 +18,7 @@ public class Mapping {
         return mapper.map(customer, CustomerDTO.class);
     }
 
-    public CustomerEntity customerEntity(CustomerDTO customer){
+    public CustomerEntity toCustomerEntity(CustomerDTO customer){
         return mapper.map(customer, CustomerEntity.class);
     }
 

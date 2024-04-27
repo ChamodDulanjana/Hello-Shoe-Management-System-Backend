@@ -1,6 +1,6 @@
 package com.chamoddulanjana.helloshoemanagementsystem.dao;
 
-import com.chamoddulanjana.helloshoemanagementsystem.entity.CustomerEntity;
+import com.chamoddulanjana.helloshoemanagementsystem.entity.custom.CustomerEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

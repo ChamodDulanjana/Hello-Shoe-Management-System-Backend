@@ -1,5 +1,8 @@
-package com.chamoddulanjana.helloshoemanagementsystem.entity;
+package com.chamoddulanjana.helloshoemanagementsystem.entity.custom;
 
+import com.chamoddulanjana.helloshoemanagementsystem.entity.Gender;
+import com.chamoddulanjana.helloshoemanagementsystem.entity.Level;
+import com.chamoddulanjana.helloshoemanagementsystem.entity.SuperEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -12,7 +15,7 @@ import java.util.Date;
 @Data
 @Table(name = "customer")
 @Entity
-public class CustomerEntity implements SuperEntity{
+public class CustomerEntity implements SuperEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String customerCode;
