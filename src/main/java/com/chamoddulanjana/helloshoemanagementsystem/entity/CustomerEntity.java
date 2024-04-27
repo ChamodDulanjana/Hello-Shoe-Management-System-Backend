@@ -1,8 +1,6 @@
 package com.chamoddulanjana.helloshoemanagementsystem.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,11 +14,14 @@ import java.util.Date;
 @Entity
 public class CustomerEntity implements SuperEntity{
     @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
     private String customerCode;
     private String customerName;
-    private String gender;
+    @Enumerated(EnumType.STRING)
+    private Gender gender;
     private Date joinDate;
-    private String level;
+    @Enumerated(EnumType.STRING)
+    private Level level;
     private int totalPoints;
     private Date dob;
     private String addressLine1;
