@@ -1,8 +1,10 @@
 package com.chamoddulanjana.helloshoemanagementsystem.service.util;
 
 import com.chamoddulanjana.helloshoemanagementsystem.dto.CustomerDTO;
+import com.chamoddulanjana.helloshoemanagementsystem.dto.EmployeeDTO;
 import com.chamoddulanjana.helloshoemanagementsystem.dto.SupplierDTO;
 import com.chamoddulanjana.helloshoemanagementsystem.entity.custom.CustomerEntity;
+import com.chamoddulanjana.helloshoemanagementsystem.entity.custom.EmployeeEntity;
 import com.chamoddulanjana.helloshoemanagementsystem.entity.custom.SupplierEntity;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -33,4 +35,11 @@ public class Mapping {
     public SupplierEntity toSupplierEntity(SupplierDTO supplier){return mapper.map(supplier, SupplierEntity.class);}
 
     public List<SupplierDTO> toSupplierDTOList(List<SupplierEntity> suppliers) {return mapper.map(suppliers, List.class);}
+
+
+    public EmployeeDTO toEmployeeDTO(EmployeeEntity employee) {return mapper.map(employee, EmployeeDTO.class);}
+
+    public EmployeeEntity toEmployeeEntity(EmployeeDTO employee) {return mapper.map(employee, EmployeeEntity.class);}
+
+    public List<EmployeeDTO> toEmployeeDTOList(List<EmployeeEntity> employees) {return mapper.map(employees, List.class);}
 }
