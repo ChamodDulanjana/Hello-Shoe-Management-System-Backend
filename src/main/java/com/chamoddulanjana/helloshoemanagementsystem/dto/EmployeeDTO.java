@@ -1,7 +1,7 @@
 package com.chamoddulanjana.helloshoemanagementsystem.dto;
 
 import com.chamoddulanjana.helloshoemanagementsystem.entity.Gender;
-import com.chamoddulanjana.helloshoemanagementsystem.entity.Level;
+import com.chamoddulanjana.helloshoemanagementsystem.entity.Role;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,14 +11,17 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class CustomerDTO {
-    private String customerCode;
-    private String customerName;
+public class EmployeeDTO {
+    private String employeeCode;
+    private String employeeName;
+    private String employeeProfilePic;
     private Gender gender;
-    private Date joinDate;
-    private Level level;
-    private int totalPoints;
+    private String status;
+    private String designation;
+    private Role role;
     private Date dob;
+    private Date dateOfJoin;
+    private String branch;
     private String addressLine1;
     private String addressLine2;
     private String addressLine3;
@@ -26,5 +29,6 @@ public class CustomerDTO {
     private String addressLine5;
     private String contactNumber;
     private String email;
-    private Date recentPurchaseDateAndTime;
+    private String informInCaseOfEmergency;
+    private String emergencyContactNumber;
 }

@@ -1,8 +1,7 @@
 package com.chamoddulanjana.helloshoemanagementsystem.entity.custom;
 
 import com.chamoddulanjana.helloshoemanagementsystem.entity.Gender;
-import com.chamoddulanjana.helloshoemanagementsystem.entity.Level;
-import com.chamoddulanjana.helloshoemanagementsystem.entity.SuperEntity;
+import com.chamoddulanjana.helloshoemanagementsystem.entity.Role;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -13,20 +12,23 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-@Table(name = "customer")
+@Table(name = "employee")
 @Entity
-public class CustomerEntity implements SuperEntity {
+public class EmployeeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    private String customerCode;
-    private String customerName;
+    private String employeeCode;
+    private String employeeName;
+    private String employeeProfilePic;
     @Enumerated(EnumType.STRING)
     private Gender gender;
-    private Date joinDate;
+    private String status;
+    private String designation;
     @Enumerated(EnumType.STRING)
-    private Level level;
-    private int totalPoints;
+    private Role role;
     private Date dob;
+    private Date dateOfJoin;
+    private String branch;
     private String addressLine1;
     private String addressLine2;
     private String addressLine3;
@@ -34,5 +36,6 @@ public class CustomerEntity implements SuperEntity {
     private String addressLine5;
     private String contactNumber;
     private String email;
-    private Date recentPurchaseDateAndTime;
+    private String informInCaseOfEmergency;
+    private String emergencyContactNumber;
 }
