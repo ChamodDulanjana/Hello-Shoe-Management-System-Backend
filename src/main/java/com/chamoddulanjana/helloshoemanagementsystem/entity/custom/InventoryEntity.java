@@ -16,6 +16,7 @@ public class InventoryEntity implements SuperEntity {
     @GeneratedValue(strategy = GenerationType.UUID)
     private String itemCode;
     private String itemDescription;
+    @Column(columnDefinition = "LONGTEXT")
     private String itemPicture;
     private String category;
     private int size;

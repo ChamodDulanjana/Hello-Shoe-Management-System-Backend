@@ -19,6 +19,7 @@ public class EmployeeEntity {
     @GeneratedValue(strategy = GenerationType.UUID)
     private String employeeCode;
     private String employeeName;
+    @Column(columnDefinition = "LONGTEXT")
     private String employeeProfilePic;
     @Enumerated(EnumType.STRING)
     private Gender gender;
