@@ -1,6 +1,7 @@
 package com.chamoddulanjana.helloshoemanagementsystem.controller;
 
 import com.chamoddulanjana.helloshoemanagementsystem.dto.CustomerDTO;
+import com.chamoddulanjana.helloshoemanagementsystem.exception.NotFoundException;
 import com.chamoddulanjana.helloshoemanagementsystem.service.custom.CustomerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -41,8 +42,13 @@ public class Customer {
     }
 
     @GetMapping(value = "/{code}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public CustomerDTO getCustomerById(@PathVariable String code){
-        return customerService.getCustomerById(code);
+    public ResponseEntity<CustomerDTO> getCustomerById(@PathVariable String code){
+        try {
+            return ResponseEntity.ok(customerService.getCustomerById(code));
+        }catch (NotFoundException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+
     }
 
     @GetMapping(value = "/getAll", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -56,8 +62,13 @@ public class Customer {
     }
 
     @PutMapping(value = "/{code}", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public void updateCustomer(@RequestBody CustomerDTO customer, @PathVariable String code){
-        customerService.updateCustomer(customer, code);
+    public ResponseEntity<?> updateCustomer(@Validated @RequestBody CustomerDTO customer, @PathVariable String code, BindingResult bindingResult){
+        if (bindingResult.hasErrors()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(bindingResult.getFieldErrors().get(0).getDefaultMessage());
+        }
+
+        CustomerDTO updatedCustomer = customerService.updateCustomer(customer, code);
+        return updatedCustomer != null ? ResponseEntity.ok(updatedCustomer) : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 
 }

@@ -12,5 +12,5 @@ public interface CustomerService extends SuperService {
     CustomerDTO getCustomerById(String customerCode);
     List<CustomerDTO> getAllCustomers();
     void deleteCustomer(String customerCode);
-    void updateCustomer(CustomerDTO customerDTO, String customerCode);
+    CustomerDTO updateCustomer(CustomerDTO customerDTO, String customerCode);
 }

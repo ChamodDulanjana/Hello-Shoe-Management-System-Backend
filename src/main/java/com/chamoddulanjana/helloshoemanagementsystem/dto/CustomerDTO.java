@@ -44,5 +44,5 @@ public class CustomerDTO {
     @NotNull(message = "email cannot be null")
     private String email;
     @NotNull(message = "recentPurchaseDateAndTime cannot be null")
-    private String recentPurchaseDateAndTime;
+    private Date recentPurchaseDateAndTime;
 }

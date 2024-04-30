@@ -42,7 +42,7 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public void updateCustomer(CustomerDTO customerDTO, String customerCode) {
+    public CustomerDTO updateCustomer(CustomerDTO customerDTO, String customerCode) {
         if (!customerDao.existsById(customerCode)) throw new NotFoundException("Customer is null!");
         var byId = customerDao.findById(customerCode);
         if (byId.isPresent()) {
@@ -58,5 +58,6 @@ public class CustomerServiceImpl implements CustomerService {
             byId.get().setAddressLine4(customerDTO.getAddressLine4());
             byId.get().setAddressLine5(customerDTO.getAddressLine5());
         }
+        return mapping.toCustomerDTO(customerDao.getReferenceById(customerCode));
     }
 }
