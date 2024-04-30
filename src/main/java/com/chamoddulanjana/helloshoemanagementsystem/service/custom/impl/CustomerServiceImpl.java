@@ -2,6 +2,7 @@ package com.chamoddulanjana.helloshoemanagementsystem.service.custom.impl;
 
 import com.chamoddulanjana.helloshoemanagementsystem.dao.CustomerDao;
 import com.chamoddulanjana.helloshoemanagementsystem.dto.CustomerDTO;
+import com.chamoddulanjana.helloshoemanagementsystem.exception.NotFoundException;
 import com.chamoddulanjana.helloshoemanagementsystem.service.custom.CustomerService;
 import com.chamoddulanjana.helloshoemanagementsystem.service.util.Mapping;
 import jakarta.transaction.Transactional;
@@ -25,11 +26,8 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public CustomerDTO getCustomerById(String customerCode) {
-        var byId = customerDao.findById(customerCode);
-        if (byId.isPresent()) {
-            return mapping.toCustomerDTO(customerDao.getReferenceById(customerCode));
-        }
-        return null;
+        if (!customerDao.existsById(customerCode)) throw new NotFoundException("Customer not found!");
+        return mapping.toCustomerDTO(customerDao.getReferenceById(customerCode));
     }
 
     @Override
@@ -39,11 +37,13 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public void deleteCustomer(String customerCode) {
+        if (!customerDao.existsById(customerCode)) throw new NotFoundException("Customer not found!");
         customerDao.deleteById(customerCode);
     }
 
     @Override
     public void updateCustomer(CustomerDTO customerDTO, String customerCode) {
+        if (!customerDao.existsById(customerCode)) throw new NotFoundException("Customer is null!");
         var byId = customerDao.findById(customerCode);
         if (byId.isPresent()) {
             byId.get().setCustomerName(customerDTO.getCustomerName());
