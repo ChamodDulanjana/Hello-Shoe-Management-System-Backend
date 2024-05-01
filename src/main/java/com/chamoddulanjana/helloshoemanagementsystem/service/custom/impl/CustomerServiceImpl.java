@@ -26,7 +26,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public CustomerDTO getCustomerById(String customerCode) {
-        if (!customerDao.existsById(customerCode)) throw new NotFoundException("Customer not found!");
+        if (!customerDao.existsById(customerCode)) throw new NotFoundException("Customer not found!!");
         return mapping.toCustomerDTO(customerDao.getReferenceById(customerCode));
     }
 
@@ -37,13 +37,13 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public void deleteCustomer(String customerCode) {
-        if (!customerDao.existsById(customerCode)) throw new NotFoundException("Customer not found!");
+        if (!customerDao.existsById(customerCode)) throw new NotFoundException("Customer not found!!");
         customerDao.deleteById(customerCode);
     }
 
     @Override
     public CustomerDTO updateCustomer(CustomerDTO customerDTO, String customerCode) {
-        if (!customerDao.existsById(customerCode)) throw new NotFoundException("Customer is null!");
+        if (!customerDao.existsById(customerCode)) throw new NotFoundException("Customer is null!!");
         var byId = customerDao.findById(customerCode);
         if (byId.isPresent()) {
             byId.get().setCustomerName(customerDTO.getCustomerName());

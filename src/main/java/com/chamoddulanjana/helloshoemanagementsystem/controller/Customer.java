@@ -42,11 +42,11 @@ public class Customer {
     }
 
     @GetMapping(value = "/{code}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<CustomerDTO> getCustomerById(@PathVariable String code){
+    public ResponseEntity<?> getCustomerById(@PathVariable String code){
         try {
             return ResponseEntity.ok(customerService.getCustomerById(code));
         }catch (NotFoundException e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Customer not found!");
         }
 
     }
@@ -66,9 +66,8 @@ public class Customer {
         if (bindingResult.hasErrors()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(bindingResult.getFieldErrors().get(0).getDefaultMessage());
         }
-
         CustomerDTO updatedCustomer = customerService.updateCustomer(customer, code);
-        return updatedCustomer != null ? ResponseEntity.ok(updatedCustomer) : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        return updatedCustomer != null ? ResponseEntity.ok(updatedCustomer) : ResponseEntity.status(HttpStatus.NOT_FOUND).body("Customer not found!");
     }
 
 }
