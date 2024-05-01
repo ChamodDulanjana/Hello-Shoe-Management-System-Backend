@@ -3,6 +3,7 @@ package com.chamoddulanjana.helloshoemanagementsystem.dto;
 import com.chamoddulanjana.helloshoemanagementsystem.entity.Gender;
 import com.chamoddulanjana.helloshoemanagementsystem.entity.Role;
 import jakarta.annotation.Nullable;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Null;
 import lombok.AllArgsConstructor;
@@ -30,9 +31,9 @@ public class EmployeeDTO {
     @NotNull(message = "role cannot be null")
     private Role role;
     @NotNull(message = "dob cannot be null")
-    private Date dob;
+    private String dob;
     @NotNull(message = "dateOfJoin cannot be null")
-    private Date dateOfJoin;
+    private String dateOfJoin;
     @NotNull(message = "branch cannot be null")
     private String branch;
     @NotNull(message = "addressLine1 cannot be null")
@@ -48,6 +49,7 @@ public class EmployeeDTO {
     @NotNull(message = "contactNumber cannot be null")
     private String contactNumber;
     @NotNull(message = "email cannot be null")
+    @Email(message = "Invalid email")
     private String email;
     @NotNull(message = "informInCaseOfEmergency cannot be null")
     private String informInCaseOfEmergency;

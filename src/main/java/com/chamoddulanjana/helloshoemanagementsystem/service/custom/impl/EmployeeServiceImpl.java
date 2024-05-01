@@ -54,8 +54,8 @@ public class EmployeeServiceImpl implements EmployeeService {
             byId.get().setStatus(employeeDTO.getStatus());
             byId.get().setDesignation(employeeDTO.getDesignation());
             byId.get().setRole(employeeDTO.getRole());
-            byId.get().setDob(employeeDTO.getDob());
-            byId.get().setDateOfJoin(employeeDTO.getDateOfJoin());
+            //byId.get().setDob(employeeDTO.getDob());
+            //byId.get().setDateOfJoin(employeeDTO.getDateOfJoin());
             byId.get().setBranch(employeeDTO.getBranch());
             byId.get().setAddressLine1(employeeDTO.getAddressLine1());
             byId.get().setAddressLine2(employeeDTO.getAddressLine2());

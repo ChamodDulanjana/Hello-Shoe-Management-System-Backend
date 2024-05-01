@@ -27,8 +27,8 @@ public class EmployeeEntity {
     private String designation;
     @Enumerated(EnumType.STRING)
     private Role role;
-    private Date dob;
-    private Date dateOfJoin;
+    private String dob;
+    private String dateOfJoin;
     private String branch;
     private String addressLine1;
     private String addressLine2;

@@ -1,7 +1,10 @@
 package com.chamoddulanjana.helloshoemanagementsystem.controller;
 
 import com.chamoddulanjana.helloshoemanagementsystem.dto.EmployeeDTO;
+import com.chamoddulanjana.helloshoemanagementsystem.entity.Gender;
+import com.chamoddulanjana.helloshoemanagementsystem.entity.Role;
 import com.chamoddulanjana.helloshoemanagementsystem.service.custom.EmployeeService;
+import com.chamoddulanjana.helloshoemanagementsystem.service.util.Base64Convertor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -25,13 +28,57 @@ public class Employee {
     }
 
     @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> saveEmployee(@Validated @RequestBody EmployeeDTO employeeDTO, BindingResult bindingResult) {
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<?> saveEmployee(@Validated
+                                              @RequestPart("employeeName") String employeeName,
+                                              @RequestPart("employeeProfilePic") String employeeProfilePic,
+                                              @RequestPart("gender") Gender gender,
+                                              @RequestPart("status") String status,
+                                              @RequestPart("designation") String designation,
+                                              @RequestPart("role") Role role,
+                                              @RequestPart("dob") String dob,
+                                              @RequestPart("dateOfJoin") String dateOfJoin,
+                                              @RequestPart("branch") String branch,
+                                              @RequestPart("addressLine1") String addressLine1,
+                                              @RequestPart("addressLine2") String addressLine2,
+                                              @RequestPart("addressLine3") String addressLine3,
+                                              @RequestPart("addressLine4") String addressLine4,
+                                              @RequestPart("addressLine5") String addressLine5,
+                                              @RequestPart("contactNumber") String contactNumber,
+                                              @RequestPart("email") String email,
+                                              @RequestPart("informInCaseOfEmergency") String informInCaseOfEmergency,
+                                              @RequestPart("emergencyContactNumber") String emergencyContactNumber,
+                                              BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(bindingResult.getFieldErrors().get(0).getDefaultMessage());
         }
+
+        //Build Base64 image
+        String base64ProPic = Base64Convertor.convertBase64(employeeProfilePic);
+
+        //build object
+        EmployeeDTO buildEmployeeDTO = new EmployeeDTO();
+        buildEmployeeDTO.setEmployeeName(employeeName);
+        buildEmployeeDTO.setEmployeeProfilePic(base64ProPic);
+        buildEmployeeDTO.setGender(gender);
+        buildEmployeeDTO.setStatus(status);
+        buildEmployeeDTO.setDesignation(designation);
+        buildEmployeeDTO.setRole(role);
+        buildEmployeeDTO.setDob(dob);
+        buildEmployeeDTO.setDateOfJoin(dateOfJoin);
+        buildEmployeeDTO.setBranch(branch);
+        buildEmployeeDTO.setAddressLine1(addressLine1);
+        buildEmployeeDTO.setAddressLine2(addressLine2);
+        buildEmployeeDTO.setAddressLine3(addressLine3);
+        buildEmployeeDTO.setAddressLine4(addressLine4);
+        buildEmployeeDTO.setAddressLine5(addressLine5);
+        buildEmployeeDTO.setContactNumber(contactNumber);
+        buildEmployeeDTO.setEmail(email);
+        buildEmployeeDTO.setInformInCaseOfEmergency(informInCaseOfEmergency);
+        buildEmployeeDTO.setEmergencyContactNumber(emergencyContactNumber);
+
         try {
-            employeeService.saveEmployee(employeeDTO);
+            employeeService.saveEmployee(buildEmployeeDTO);
             return ResponseEntity.status(HttpStatus.CREATED).body("Employee saved successfully!");
         }catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
