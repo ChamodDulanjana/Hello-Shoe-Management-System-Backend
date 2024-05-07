@@ -33,7 +33,7 @@ public class InventoryDTO {
     private int size;
 
     @NotNull(message = "supplierCode cannot be null")
-    @Length(min = 3, max = 50, message = "supplierCode too short or too long")
+    @Length(min = 3, message = "supplierCode too short or too long")
     private String supplierCode;
 
     @NotNull(message = "supplierName cannot be null")
