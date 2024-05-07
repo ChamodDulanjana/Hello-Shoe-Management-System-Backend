@@ -19,6 +19,7 @@ public class CustomerEntity implements SuperEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String customerCode;
+    @Column(nullable = false, length = 30)
     private String customerName;
     @Enumerated(EnumType.STRING)
     private Gender gender;
