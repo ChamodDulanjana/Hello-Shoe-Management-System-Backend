@@ -31,6 +31,7 @@ public class EmployeeDTO {
     private String employeeProfilePic;
 
     @NotNull(message = "gender cannot be null")
+    @Length(min = 4, max = 6, message = "Invalid gender")
     private Gender gender;
 
     @NotNull(message = "status cannot be null")
@@ -42,6 +43,7 @@ public class EmployeeDTO {
     private String designation;
 
     @NotNull(message = "role cannot be null")
+    @Length(min = 4, max = 5, message = "Invalid role")
     private Role role;
 
     @NotNull(message = "dob cannot be null")
@@ -61,19 +63,19 @@ public class EmployeeDTO {
     private String addressLine1;
 
     @Nullable
-    @Length(min = 3, max = 50, message = "addressLine2 too short or too long")
+    @Length(max = 50, message = "addressLine2 too long")
     private String addressLine2;
 
     @Nullable
-    @Length(min = 3, max = 50, message = "addressLine3 too short or too long")
+    @Length(max = 50, message = "addressLine3 too long")
     private String addressLine3;
 
     @Nullable
-    @Length(min = 3, max = 50, message = "addressLine4 too short or too long")
+    @Length(max = 50, message = "addressLine4 too long")
     private String addressLine4;
 
     @Nullable
-    @Length(min = 3, max = 50, message = "addressLine5 too short or too long")
+    @Length(max = 50, message = "addressLine5 too long")
     private String addressLine5;
 
     @NotNull(message = "contactNumber cannot be null")
