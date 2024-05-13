@@ -35,9 +35,9 @@ public class EmployeeEntity {
     @Column(nullable = false, length = 5)
     private Role role;
     @Column(nullable = false, length = 10)
-    private String dob;
+    private Date dob;
     @Column(nullable = false, length = 10)
-    private String dateOfJoin;
+    private Date dateOfJoin;
     @Column(nullable = false, length = 20)
     private String branch;
     @Column(nullable = false, length = 50)

@@ -4,7 +4,7 @@ import com.chamoddulanjana.helloshoemanagementsystem.dao.CustomerDao;
 import com.chamoddulanjana.helloshoemanagementsystem.dto.CustomerDTO;
 import com.chamoddulanjana.helloshoemanagementsystem.exception.NotFoundException;
 import com.chamoddulanjana.helloshoemanagementsystem.service.custom.CustomerService;
-import com.chamoddulanjana.helloshoemanagementsystem.service.util.Mapping;
+import com.chamoddulanjana.helloshoemanagementsystem.util.Mapping;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

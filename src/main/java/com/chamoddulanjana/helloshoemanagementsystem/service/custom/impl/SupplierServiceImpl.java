@@ -2,15 +2,13 @@ package com.chamoddulanjana.helloshoemanagementsystem.service.custom.impl;
 
 import com.chamoddulanjana.helloshoemanagementsystem.dao.SupplierDao;
 import com.chamoddulanjana.helloshoemanagementsystem.dto.SupplierDTO;
-import com.chamoddulanjana.helloshoemanagementsystem.entity.custom.SupplierEntity;
 import com.chamoddulanjana.helloshoemanagementsystem.service.custom.SupplierService;
-import com.chamoddulanjana.helloshoemanagementsystem.service.util.Mapping;
+import com.chamoddulanjana.helloshoemanagementsystem.util.Mapping;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @Transactional

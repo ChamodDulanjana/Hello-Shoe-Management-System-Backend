@@ -1,4 +1,4 @@
-package com.chamoddulanjana.helloshoemanagementsystem.service.util;
+package com.chamoddulanjana.helloshoemanagementsystem.util;
 
 import com.chamoddulanjana.helloshoemanagementsystem.dto.CustomerDTO;
 import com.chamoddulanjana.helloshoemanagementsystem.dto.EmployeeDTO;

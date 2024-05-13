@@ -4,7 +4,7 @@ import com.chamoddulanjana.helloshoemanagementsystem.dto.EmployeeDTO;
 import com.chamoddulanjana.helloshoemanagementsystem.entity.Gender;
 import com.chamoddulanjana.helloshoemanagementsystem.entity.Role;
 import com.chamoddulanjana.helloshoemanagementsystem.service.custom.EmployeeService;
-import com.chamoddulanjana.helloshoemanagementsystem.service.util.Base64Convertor;
+import com.chamoddulanjana.helloshoemanagementsystem.util.ImageUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -13,6 +13,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -36,8 +37,8 @@ public class Employee {
                                               @RequestPart("status") String status,
                                               @RequestPart("designation") String designation,
                                               @RequestPart("role") Role role,
-                                              @RequestPart("dob") String dob,
-                                              @RequestPart("dateOfJoin") String dateOfJoin,
+                                              @RequestPart("dob") Date dob,
+                                              @RequestPart("dateOfJoin") Date dateOfJoin,
                                               @RequestPart("branch") String branch,
                                               @RequestPart("addressLine1") String addressLine1,
                                               @RequestPart("addressLine2") String addressLine2,
@@ -54,7 +55,7 @@ public class Employee {
         }
 
         //Build Base64 image
-        String base64ProPic = Base64Convertor.convertBase64(employeeProfilePic);
+        String base64ProPic = ImageUtil.convertBase64(employeeProfilePic);
 
         //build object
         EmployeeDTO buildEmployeeDTO = new EmployeeDTO();
