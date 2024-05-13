@@ -1,13 +1,7 @@
 package com.chamoddulanjana.helloshoemanagementsystem.util;
 
-import com.chamoddulanjana.helloshoemanagementsystem.dto.CustomerDTO;
-import com.chamoddulanjana.helloshoemanagementsystem.dto.EmployeeDTO;
-import com.chamoddulanjana.helloshoemanagementsystem.dto.InventoryDTO;
-import com.chamoddulanjana.helloshoemanagementsystem.dto.SupplierDTO;
-import com.chamoddulanjana.helloshoemanagementsystem.entity.custom.CustomerEntity;
-import com.chamoddulanjana.helloshoemanagementsystem.entity.custom.EmployeeEntity;
-import com.chamoddulanjana.helloshoemanagementsystem.entity.custom.InventoryEntity;
-import com.chamoddulanjana.helloshoemanagementsystem.entity.custom.SupplierEntity;
+import com.chamoddulanjana.helloshoemanagementsystem.dto.*;
+import com.chamoddulanjana.helloshoemanagementsystem.entity.custom.*;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
@@ -51,4 +45,14 @@ public class Mapping {
     public InventoryEntity toInventoryEntity(InventoryDTO inventory) {return mapper.map(inventory, InventoryEntity.class);}
 
     public List<InventoryDTO> toInventoryDTOList(List<InventoryEntity> inventoryList) {return mapper.map(inventoryList, List.class);}
+
+
+    public UserDTO toUserDTO(UserEntity user) {return mapper.map(user, UserDTO.class);}
+
+    public UserEntity toUserEntity(UserDTO user) {return mapper.map(user, UserEntity.class);}
+
+    public List<UserDTO> toUserDTOList(List<UserEntity> users) {return mapper.map(users, List.class);}
+
+
+
 }
