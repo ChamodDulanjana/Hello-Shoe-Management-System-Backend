@@ -43,7 +43,7 @@ public class SupplierServiceImpl implements SupplierService {
     }
 
     @Override
-    public void updateSupplier(SupplierDTO supplierDTO, String code) {
+    public SupplierDTO updateSupplier(SupplierDTO supplierDTO, String code) {
         var byId = supplierDao.findById(code);
         if (byId.isPresent()) {
             byId.get().setSupplierName(supplierDTO.getSupplierName());
@@ -58,5 +58,6 @@ public class SupplierServiceImpl implements SupplierService {
             byId.get().setContactNumber2(supplierDTO.getContactNumber2());
             byId.get().setEmail(supplierDTO.getEmail());
         }
+        return mapping.toSupplierDTO(supplierDao.getReferenceById(code));
     }
 }

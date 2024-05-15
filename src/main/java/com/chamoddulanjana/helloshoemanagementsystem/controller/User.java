@@ -37,7 +37,8 @@ public class User {
             userService.saveUser(user);
             return ResponseEntity.status(HttpStatus.CREATED).body(" User saved successfully");
         }catch (Exception e){
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Internal server error! | Customer saved successfully!  \\nMore Details\\n\"+e.getMessage()" +e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Internal server error! | User saved successfully!  \\nMore Details\\n\"+e.getMessage()" +e.getMessage());
         }
     }
 

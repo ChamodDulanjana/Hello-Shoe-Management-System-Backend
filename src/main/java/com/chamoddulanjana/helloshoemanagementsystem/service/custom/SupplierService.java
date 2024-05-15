@@ -10,6 +10,6 @@ public interface SupplierService extends SuperService {
     SupplierDTO getSupplierById(String code);
     List<SupplierDTO> getAllSuppliers();
     void deleteSupplier(String code);
-    void updateSupplier(SupplierDTO supplierDTO, String code);
+    SupplierDTO updateSupplier(SupplierDTO supplierDTO, String code);
 
 }
