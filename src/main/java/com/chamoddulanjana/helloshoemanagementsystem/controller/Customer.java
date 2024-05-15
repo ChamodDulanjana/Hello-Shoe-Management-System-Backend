@@ -56,7 +56,7 @@ public class Customer {
         return customerService.getAllCustomers();
     }
 
-    @DeleteMapping("/{code}")
+    @DeleteMapping(value = "/{code}")
     public void deleteCustomer(@PathVariable String code){
         customerService.deleteCustomer(code);
     }

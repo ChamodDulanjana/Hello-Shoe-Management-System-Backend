@@ -1,5 +1,6 @@
 package com.chamoddulanjana.helloshoemanagementsystem.controller;
 
+import com.chamoddulanjana.helloshoemanagementsystem.dto.CustomerDTO;
 import com.chamoddulanjana.helloshoemanagementsystem.dto.UserDTO;
 import com.chamoddulanjana.helloshoemanagementsystem.exception.NotFoundException;
 import com.chamoddulanjana.helloshoemanagementsystem.service.custom.UserService;
@@ -11,6 +12,8 @@ import org.springframework.stereotype.Repository;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Repository
 @RequestMapping("api/v1/user")
@@ -45,5 +48,24 @@ public class User {
         }catch (NotFoundException e){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found!");
         }
+    }
+
+    @GetMapping(value = "/getAll", produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<UserDTO> getAllUsers(){
+        return userService.findAllUsers();
+    }
+
+    @DeleteMapping(value = "/{code}")
+    public void deleteUserById(@PathVariable String code){
+        userService.deleteUser(code);
+    }
+
+    @PutMapping(value = "/{code}")
+    public ResponseEntity<?> updateUser(@Validated @RequestBody UserDTO user, @PathVariable String code, BindingResult bindingResult){
+        if (bindingResult.hasErrors()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(bindingResult.getFieldErrors().get(0).getDefaultMessage());
+        }
+        UserDTO userDTO = userService.updateUser(user, code);
+        return userDTO != null ? ResponseEntity.ok(userDTO) : ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found!");
     }
 }
