@@ -2,11 +2,17 @@ package com.chamoddulanjana.helloshoemanagementsystem.service.custom.impl;
 
 import com.chamoddulanjana.helloshoemanagementsystem.dao.EmployeeDao;
 import com.chamoddulanjana.helloshoemanagementsystem.dto.EmployeeDTO;
+import com.chamoddulanjana.helloshoemanagementsystem.exception.NotFoundException;
 import com.chamoddulanjana.helloshoemanagementsystem.service.custom.EmployeeService;
 import com.chamoddulanjana.helloshoemanagementsystem.util.Mapping;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -15,12 +21,23 @@ import java.util.List;
 @RequiredArgsConstructor
 public class EmployeeServiceImpl implements EmployeeService {
 
+    private final Logger logger = LoggerFactory.getLogger(EmployeeServiceImpl.class);
     private final EmployeeDao employeeDao;
     private final Mapping mapping;
+    private final ObjectMapper json;
 
     @Override
-    public EmployeeDTO saveEmployee(EmployeeDTO employeeDTO) {
-        return mapping.toEmployeeDTO(employeeDao.save(mapping.toEmployeeEntity(employeeDTO)));
+    public EmployeeDTO saveEmployee(String employeeDTO, MultipartFile image) throws JsonProcessingException {
+        EmployeeDTO dto = json.readValue(employeeDTO, EmployeeDTO.class);
+        employeeDao.findEmployeeByEmail(dto.getEmail().toLowerCase()).ifPresent(employee -> {
+            logger.error("Employee Email Exists: {}", dto.getEmail());
+            throw new NotFoundException("Employee Email Exists");
+        });
+        employeeDao.findEmployeeByContactNumber(dto.getContactNumber()).ifPresent(employee -> {
+            logger.error("Employee Contact Exists: {}", dto.getContactNumber());
+            throw new NotFoundException("Employee Contact Exists");
+        });
+
     }
 
     @Override
@@ -43,17 +60,17 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public void updateEmployee(EmployeeDTO employeeDTO, String code) {
+    public void updateEmployee(String employeeDTO, String code, MultipartFile image) {
         var byId = employeeDao.findById(code);
         if (byId.isPresent()) {
-            byId.get().setEmployeeName(employeeDTO.getEmployeeName());
+            /*byId.get().setEmployeeName(employeeDTO.getEmployeeName());
             byId.get().setEmployeeProfilePic(employeeDTO.getEmployeeProfilePic());
             byId.get().setGender(employeeDTO.getGender());
             byId.get().setStatus(employeeDTO.getStatus());
             byId.get().setDesignation(employeeDTO.getDesignation());
             byId.get().setRole(employeeDTO.getRole());
-            //byId.get().setDob(employeeDTO.getDob());
-            //byId.get().setDateOfJoin(employeeDTO.getDateOfJoin());
+            byId.get().setDob(employeeDTO.getDob());
+            byId.get().setDateOfJoin(employeeDTO.getDateOfJoin());
             byId.get().setBranch(employeeDTO.getBranch());
             byId.get().setAddressLine1(employeeDTO.getAddressLine1());
             byId.get().setAddressLine2(employeeDTO.getAddressLine2());
@@ -63,7 +80,7 @@ public class EmployeeServiceImpl implements EmployeeService {
             byId.get().setContactNumber(employeeDTO.getContactNumber());
             byId.get().setEmail(employeeDTO.getEmail());
             byId.get().setInformInCaseOfEmergency(employeeDTO.getInformInCaseOfEmergency());
-            byId.get().setEmergencyContactNumber(employeeDTO.getEmergencyContactNumber());
+            byId.get().setEmergencyContactNumber(employeeDTO.getEmergencyContactNumber());*/
         }
     }
 }
