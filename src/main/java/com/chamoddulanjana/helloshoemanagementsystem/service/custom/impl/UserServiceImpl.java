@@ -9,7 +9,7 @@ import com.chamoddulanjana.helloshoemanagementsystem.entity.Role;
 import com.chamoddulanjana.helloshoemanagementsystem.entity.custom.EmployeeEntity;
 import com.chamoddulanjana.helloshoemanagementsystem.entity.custom.UserEntity;
 import com.chamoddulanjana.helloshoemanagementsystem.exception.AlreadyExistException;
-import com.chamoddulanjana.helloshoemanagementsystem.service.JWTService;
+import com.chamoddulanjana.helloshoemanagementsystem.service.custom.JWTService;
 import com.chamoddulanjana.helloshoemanagementsystem.service.custom.UserService;
 import com.chamoddulanjana.helloshoemanagementsystem.util.GenerateIds;
 import jakarta.transaction.Transactional;

@@ -1,6 +1,6 @@
 package com.chamoddulanjana.helloshoemanagementsystem.service.custom.impl;
 
-import com.chamoddulanjana.helloshoemanagementsystem.service.JWTService;
+import com.chamoddulanjana.helloshoemanagementsystem.service.custom.JWTService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
