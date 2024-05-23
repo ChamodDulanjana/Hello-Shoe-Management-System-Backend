@@ -7,6 +7,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
@@ -23,12 +25,11 @@ public class InventoryEntity implements SuperEntity {
     private String itemPicture;
     @Column(nullable = false, length = 20)
     private String category;
+
+    @JoinColumn(referencedColumnName = "supplier_name")
     @Column(nullable = false)
-    private int size;
-    @Column(nullable = false)
-    private String supplierCode;
-    @Column(nullable = false, length = 50)
     private String supplierName;
+
     @Column(nullable = false)
     private int quantityOnHand;
     @Column(nullable = false)
@@ -39,6 +40,18 @@ public class InventoryEntity implements SuperEntity {
     private double expectedProfit;
     @Column(nullable = false)
     private double profitMargin;
-    @Column(nullable = false, length = 100)
+    @Column( length = 100)
     private String status;
+
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "supplier_Id")
+    private SupplierEntity supplier;
+
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "stock_id")
+    private StockEntity stock;
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "item_id")
+    private List<SaleDetailsEntity> saleDetailsList;
 }
