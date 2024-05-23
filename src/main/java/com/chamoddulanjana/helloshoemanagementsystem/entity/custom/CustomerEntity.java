@@ -9,7 +9,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -27,14 +28,14 @@ public class CustomerEntity implements SuperEntity {
     @Column(nullable = false, length = 6)
     private Gender gender;
     @Column(nullable = false, length = 10)
-    private Date joinDate;
+    private LocalDate joinDate;
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 6)
     private Level level;
     @Column(nullable = false)
-    private int totalPoints;
+    private double totalPoints;
     @Column(nullable = false, length = 10)
-    private Date dob;
+    private LocalDate dob;
     @Column(nullable = false, length = 50)
     private String addressLine1;
     @Column(length = 50)
@@ -50,5 +51,5 @@ public class CustomerEntity implements SuperEntity {
     @Column(nullable = false, length = 20)
     private String email;
     @Column(nullable = false, length = 20)
-    private Date recentPurchaseDateAndTime;
+    private LocalDateTime recentPurchaseDateAndTime;
 }

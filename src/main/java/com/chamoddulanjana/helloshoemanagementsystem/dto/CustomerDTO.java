@@ -12,7 +12,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
 
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -32,7 +33,7 @@ public class CustomerDTO {
 
     @NotNull(message = "joinDate cannot be null")
     @Length(min = 6, message = "Invalid join date")
-    private Date joinDate;
+    private LocalDate joinDate;
 
     @NotNull(message = "level cannot be null")
     @Length(min = 3, max = 6, message = "Invalid level")
@@ -40,11 +41,11 @@ public class CustomerDTO {
 
     @NotNull(message = "totalPoints cannot be null")
     @Length(min = 1, message = "Invalid total points")
-    private int totalPoints;
+    private double totalPoints;
 
     @NotNull(message = "dob cannot be null")
     @Length(min = 8, max = 10, message = "Invalid date of birth")
-    private Date dob;
+    private LocalDate dob;
 
     @NotNull(message = "addressLine1 cannot be null")
     @Length(min = 3, max = 50, message = "addressLine1 too short or too long")
@@ -76,5 +77,5 @@ public class CustomerDTO {
 
     @NotNull(message = "recentPurchaseDateAndTime cannot be null")
     @Length(min = 2, message = "Invalid date & time")
-    private Date recentPurchaseDateAndTime;
+    private LocalDateTime recentPurchaseDateAndTime;
 }
