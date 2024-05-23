@@ -49,8 +49,6 @@ public class InventoryServiceImpl implements InventoryService {
             byId.get().setItemDescription(inventoryDTO.getItemDescription());
             byId.get().setItemPicture(inventoryDTO.getItemPicture());
             byId.get().setCategory(inventoryDTO.getCategory());
-            byId.get().setSize(inventoryDTO.getSize());
-            byId.get().setSupplierCode(inventoryDTO.getSupplierCode());
             byId.get().setSupplierName(inventoryDTO.getSupplierName());
             byId.get().setQuantityOnHand(inventoryDTO.getQuantityOnHand());
             byId.get().setUnitPrice_sale(inventoryDTO.getUnitPrice_sale());
