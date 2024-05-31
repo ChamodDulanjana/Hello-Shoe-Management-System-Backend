@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 
@@ -20,8 +21,7 @@ public class SaleEntity {
     @Id
     @Column(length = 20)
     private String saleId;
-    private LocalDate date;
-    private LocalTime time;
+    private LocalDateTime createdAt;
     private String paymentDescription;
     private String cashierName;
 

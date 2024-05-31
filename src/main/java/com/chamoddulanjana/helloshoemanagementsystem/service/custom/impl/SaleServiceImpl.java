@@ -1,22 +1,26 @@
 package com.chamoddulanjana.helloshoemanagementsystem.service.custom.impl;
 
 import com.chamoddulanjana.helloshoemanagementsystem.dao.*;
-import com.chamoddulanjana.helloshoemanagementsystem.dto.RefundDTO;
-import com.chamoddulanjana.helloshoemanagementsystem.dto.SaleDTO;
-import com.chamoddulanjana.helloshoemanagementsystem.dto.SaleDetailsDTO;
+import com.chamoddulanjana.helloshoemanagementsystem.dto.*;
 import com.chamoddulanjana.helloshoemanagementsystem.entity.Level;
 import com.chamoddulanjana.helloshoemanagementsystem.entity.custom.*;
 import com.chamoddulanjana.helloshoemanagementsystem.exception.NotFoundException;
 import com.chamoddulanjana.helloshoemanagementsystem.exception.RefundNotAvailableException;
 import com.chamoddulanjana.helloshoemanagementsystem.service.custom.SaleService;
+import com.chamoddulanjana.helloshoemanagementsystem.util.Base64Encoder;
 import com.chamoddulanjana.helloshoemanagementsystem.util.GenerateIds;
+import com.chamoddulanjana.helloshoemanagementsystem.util.InvoiceUtil;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
 import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -26,6 +30,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicReference;
 
 @Service
 @Transactional
@@ -39,10 +44,13 @@ public class SaleServiceImpl implements SaleService {
     private final InventoryDao inventoryDao;
     private final DecimalFormat df = new DecimalFormat("0.00");
     private final Logger logger = LoggerFactory.getLogger(SaleServiceImpl.class);
+    private final InvoiceUtil invoiceUtil;
+    private final Base64Encoder base64Encoder;
 
     @Override
-    public void addSale(SaleDTO dto) {
+    public ResponseEntity<String> addSale(SaleDTO dto) {
         logger.info("Sale request received");
+        AtomicReference<Double> addedPoints = new AtomicReference<>(0.0);
         Optional<CustomerEntity> customer = Optional.empty();
         if (dto.getCustomerId() != null) {
             customer = customerDao.findById(dto.getCustomerId());
@@ -75,7 +83,7 @@ public class SaleServiceImpl implements SaleService {
             stockDao.save(stock);
         });
 
-        SaleEntity sale = SaleEntity.builder().saleId(GenerateIds.getId("SAL").toLowerCase()).date(LocalDate.now()).paymentDescription(dto.getPaymentDescription()).time(LocalTime.now()).customer(customer.orElse(null)).cashierName(userName).build();
+        SaleEntity sale = SaleEntity.builder().saleId(GenerateIds.getId("SAL").toLowerCase()).createdAt(LocalDateTime.now()).paymentDescription(dto.getPaymentDescription()).time(LocalTime.now()).customer(customer.orElse(null)).cashierName(userName).build();
         saleDao.save(sale);
 
         saleDetailsList.forEach(saleDTO -> saleDetailsDao
@@ -96,13 +104,13 @@ public class SaleServiceImpl implements SaleService {
 
         customer.ifPresent(cus -> {
             cus.setRecentPurchaseDateAndTime(LocalDateTime.now());
-            Double totalPoints = dto
+            addedPoints.set(dto
                     .getSaleDetailsList()
                     .stream()
                     .mapToDouble(SaleDetailsDTO::getTotal)
-                    .sum() / 100.0;
-            totalPoints = Double.valueOf(df.format(totalPoints));
-            cus.setTotalPoints(cus.getTotalPoints() + totalPoints);
+                    .sum() / 1000.0);
+            addedPoints.set(Double.valueOf(df.format(addedPoints.get())));
+            cus.setTotalPoints(cus.getTotalPoints() + addedPoints.get());
 
             if (cus.getTotalPoints() < 50) {
                 cus.setLevel(Level.NEW);
@@ -116,14 +124,18 @@ public class SaleServiceImpl implements SaleService {
             System.out.print(cus);
             customerDao.save(cus);
         });
+        InvoiceDTO invoiceDTO = InvoiceDTO.builder().saleId(sale.getSaleId().toUpperCase()).saleDetailsList(saleDetailsList).cashierName(sale.getCashierName().toUpperCase()).customerName(sale.getCustomer() != null ? sale.getCustomer().getName().toUpperCase() : null).paymentDescription(sale.getPaymentDescription()).addedPoints(addedPoints.get()).totalPoints(sale.getCustomer() != null ? sale.getCustomer().getTotalPoints() : null).rePrinted(false).build();
+        byte[] invoice = invoiceUtil.getInvoice(invoiceDTO);
+        String s = base64Encoder.encodePdf(invoice);
         logger.info("Sale request completed {}", sale.getSaleId());
+        return ResponseEntity.ok().body(s);
     }
 
     @Override
     public SaleDTO getSale(String id) {
         SaleEntity sale = saleDao.findById(id).orElseThrow(() -> new NotFoundException("Sale not found " + id));
-        LocalDate date = sale.getDate();
-        long between = ChronoUnit.DAYS.between(date, LocalDate.now());
+        LocalDateTime date = sale.getCreatedAt();
+        long between = ChronoUnit.DAYS.between(date, LocalDateTime.now());
         if (between >= 3) {
             throw new RefundNotAvailableException("Refund Not Available for " + id);
         }
@@ -139,9 +151,10 @@ public class SaleServiceImpl implements SaleService {
         for (SaleDetailsEntity saleDetails : saleDetailsList) {
             if (saleDetails.getInventory().getItemCode().equalsIgnoreCase(itemId)) {
                 saleDetailDTOS.add(SaleDetailsDTO.builder().description(saleDetails.getName()).itemId(saleDetails.getInventory().getItemCode()).price(saleDetails.getPrice()).quantity(saleDetails.getQty()).size(saleDetails.getSize()).total(saleDetails.getTotal()).build());
+                return saleDetailDTOS;
             }
         }
-        return saleDetailDTOS;
+        throw new NotFoundException("Item not found " + itemId);
     }
 
     @Override
@@ -194,5 +207,53 @@ public class SaleServiceImpl implements SaleService {
         stockDao.save(stock);
         saleDao.save(sale);
         inventoryDao.save(item);
+    }
+
+    public OverViewDTO getOverview() {
+        logger.info("Get day overview request received");
+        List<Object[]> billCount = saleDao.findBillCount(LocalDate.now().toString());
+        if (billCount.isEmpty()) throw new NotFoundException("No Sales Found");
+
+        int count = Integer.parseInt(billCount.get(1)[0].toString());
+        List<SaleEntity> saleList = saleDao.getAllTodaySales(LocalDate.now().toString()).orElseThrow(() -> new NotFoundException("No Sales Found"));
+        Double totalSales = saleList.stream().mapToDouble(sale -> sale.getSaleDetailsList().stream().mapToDouble(SaleDetailsEntity::getTotal).sum()).sum();
+        Double totalProfit = saleList.stream().mapToDouble(sale -> sale.getSaleDetailsList().stream().mapToDouble(saleDetails -> saleDetails.getQty() * saleDetails.getInventory().getExpectedProfit()).sum()).sum();
+        return OverViewDTO.builder().totalSales(Double.valueOf(df.format(totalSales))).totalProfit(Double.valueOf(df.format(totalProfit))).totalBills(count).build();
+    }
+
+    @Override
+    public ResponseEntity<String> getAInvoice(String id) {
+        logger.info("Get invoice request received {}", id);
+        SaleEntity sale = saleDao.findById(id).orElseThrow(() -> new NotFoundException("No Sales Found"));
+        return getStringResponseEntity(sale);
+    }
+
+    @Override
+    public ResponseEntity<String> getLastInvoice() throws IOException {
+        logger.info("Last invoice request received");
+        Optional<SaleEntity> sale = saleDao.findLatestInvoice();
+        if (sale.isEmpty()) throw new NotFoundException("No Sales Found");
+        return getStringResponseEntity(sale.get());
+    }
+
+    @Override
+    public List<SaleDTO> getSales(Integer page, Integer limit) {
+        Pageable pageable = PageRequest.of(page, limit);
+        return saleDao.findAll(pageable).getContent().stream().map(sale -> SaleDTO.builder().saleId(sale.getSaleId()).paymentDescription(sale.getPaymentDescription()).customerId(sale.getCustomer().getCustomerName()).createdAt(sale.getCreatedAt()).cashierName(sale.getCashierName()).build()).toList();
+    }
+
+    @Override
+    public List<SaleDTO> searchSales(String search) {
+        return saleDao.filterSales(search).stream().map(sale -> SaleDTO.builder().saleId(sale.getSaleId()).paymentDescription(sale.getPaymentDescription()).customerId(sale.getCustomer().getCustomerName()).createdAt(sale.getCreatedAt()).cashierName(sale.getCashierName()).build()).toList();
+    }
+
+    private ResponseEntity<String> getStringResponseEntity(SaleEntity sale) {
+        List<SaleDetailsEntity> saleDetailsList = sale.getSaleDetailsList();
+        List<SaleDetailsDTO> saleDetailDTOS = new ArrayList<>();
+        saleDetailsList.forEach(saleDetails -> saleDetailDTOS.add(SaleDetailsDTO.builder().description(saleDetails.getName()).itemId(saleDetails.getInventory().getItemCode()).price(saleDetails.getPrice()).quantity(saleDetails.getQty()).size(saleDetails.getSize()).total(saleDetails.getTotal()).build()));
+        InvoiceDTO invoiceDTO = InvoiceDTO.builder().rePrinted(true).saleId(sale.getSaleId().toUpperCase()).saleDetailsList(saleDetailDTOS).cashierName(sale.getCashierName().toUpperCase()).customerName(sale.getCustomer() != null ? sale.getCustomer().getCustomerName().toUpperCase() : null).paymentDescription(sale.getPaymentDescription()).totalPoints(sale.getCustomer()!=null?sale.getCustomer().getTotalPoints():null).addedPoints(sale.getSaleDetailsList().stream().map(SaleDetailsEntity::getTotal).reduce(0.0,Double::sum)/1000.0).build();
+        byte[] invoice = invoiceUtil.getInvoice(invoiceDTO);
+        String s = base64Encoder.encodePdf(invoice);
+        return ResponseEntity.ok().body(s);
     }
 }

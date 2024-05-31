@@ -40,8 +40,9 @@ public class InventoryEntity implements SuperEntity {
     private double expectedProfit;
     @Column(nullable = false)
     private double profitMargin;
-    @Column( length = 100)
-    private String status;
+    @Column(nullable = false, length = 5,columnDefinition = "boolean default true")
+    private Boolean availability;
+
 
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "supplier_Id")

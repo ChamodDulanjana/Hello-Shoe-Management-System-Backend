@@ -1,5 +1,6 @@
 package com.chamoddulanjana.helloshoemanagementsystem.dto;
 
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Null;
 import lombok.AllArgsConstructor;
@@ -20,17 +21,15 @@ public class InventoryDTO {
     @Length(min = 3, max = 50, message = "itemDescription too short or too long")
     private String itemDescription;
 
-    @NotNull(message = "itemPicture cannot be null")
-    @Length(min = 1, message = "Invalid itemPicture")
     private String itemPicture;
 
     @NotNull(message = "category cannot be null")
     @Length(min = 3, max = 20, message = "category too short or too long")
     private String category;
 
-    @NotNull(message = "size cannot be null")
-    @Length(min = 1, message = "Invalid shoe size")
-    private int size;
+    @NotNull(message = "Category cannot be null")
+    @Length(min = 3, max = 50, message = "Category must be between 3 and 50 characters")
+    private String gender;
 
     @NotNull(message = "supplierCode cannot be null")
     @Length(min = 3, message = "supplierCode too short or too long")
@@ -52,6 +51,14 @@ public class InventoryDTO {
     @Length(min = 1, message = "Invalid unitPrice buy")
     private double unitPrice_buy;
 
+    @NotNull(message = "Occasion cannot be null")
+    @Length(min = 3, max = 50, message = "Occasion must be between 3 and 50 characters")
+    private String occasion;
+
+    @NotNull(message = "Varieties cannot be null")
+    @Length(min = 3, max = 50, message = "Varieties must be between 3 and 50 characters")
+    private String verities;
+
     @NotNull(message = "expectedProfit cannot be null")
     @Length(min = 1, message = "Invalid expectedProfit")
     private double expectedProfit;
@@ -60,7 +67,5 @@ public class InventoryDTO {
     @Length(min = 1, message = "Invalid profitMargin")
     private double profitMargin;
 
-    @NotNull(message = "status cannot be null")
-    @Length(min = 1, max = 100, message = "status too short or too long")
-    private String status;
+
 }

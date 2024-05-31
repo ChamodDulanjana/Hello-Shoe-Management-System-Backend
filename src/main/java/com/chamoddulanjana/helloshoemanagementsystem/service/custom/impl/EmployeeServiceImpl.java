@@ -6,7 +6,7 @@ import com.chamoddulanjana.helloshoemanagementsystem.entity.custom.EmployeeEntit
 import com.chamoddulanjana.helloshoemanagementsystem.exception.NotFoundException;
 import com.chamoddulanjana.helloshoemanagementsystem.service.custom.EmployeeService;
 import com.chamoddulanjana.helloshoemanagementsystem.util.GenerateIds;
-import com.chamoddulanjana.helloshoemanagementsystem.util.ImageUtil;
+import com.chamoddulanjana.helloshoemanagementsystem.util.Base64Encoder;
 import com.chamoddulanjana.helloshoemanagementsystem.util.Mapping;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
@@ -28,7 +28,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     private final Logger logger = LoggerFactory.getLogger(EmployeeServiceImpl.class);
     private final EmployeeDao employeeDao;
     private final Mapping mapping;
-    private final ImageUtil imageUtil;
+    private final Base64Encoder base64Encoder;
     private final ObjectMapper json;
 
     @Override
@@ -47,7 +47,7 @@ public class EmployeeServiceImpl implements EmployeeService {
                 .builder()
                 .employeeCode(id.toLowerCase())
                 .employeeName(dto.getEmployeeName().toLowerCase())
-                .employeeProfilePic(image != null ? imageUtil.convertBase64(image) : dto.getEmployeeProfilePic())
+                .employeeProfilePic(image != null ? base64Encoder.convertBase64(image) : dto.getEmployeeProfilePic())
                 .gender(dto.getGender())
                 .status(dto.getStatus().toLowerCase())
                 .designation(dto.getDesignation().toLowerCase())
@@ -122,7 +122,7 @@ public class EmployeeServiceImpl implements EmployeeService {
             existEmployee.setEmergencyContactNumber(dto.getEmergencyContactNumber());
 
             if (image != null) {
-                existEmployee.setEmployeeProfilePic(imageUtil.convertBase64(image));
+                existEmployee.setEmployeeProfilePic(base64Encoder.convertBase64(image));
             }
             employeeDao.save(existEmployee);
             logger.info("Employee Updated");
