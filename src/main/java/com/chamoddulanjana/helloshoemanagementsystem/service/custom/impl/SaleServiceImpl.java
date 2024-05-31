@@ -83,7 +83,7 @@ public class SaleServiceImpl implements SaleService {
             stockDao.save(stock);
         });
 
-        SaleEntity sale = SaleEntity.builder().saleId(GenerateIds.getId("SAL").toLowerCase()).createdAt(LocalDateTime.now()).paymentDescription(dto.getPaymentDescription()).time(LocalTime.now()).customer(customer.orElse(null)).cashierName(userName).build();
+        SaleEntity sale = SaleEntity.builder().saleId(GenerateIds.getId("SAL").toLowerCase()).createdAt(LocalDateTime.now()).paymentDescription(dto.getPaymentDescription()).customer(customer.orElse(null)).cashierName(userName).build();
         saleDao.save(sale);
 
         saleDetailsList.forEach(saleDTO -> saleDetailsDao
@@ -124,7 +124,7 @@ public class SaleServiceImpl implements SaleService {
             System.out.print(cus);
             customerDao.save(cus);
         });
-        InvoiceDTO invoiceDTO = InvoiceDTO.builder().saleId(sale.getSaleId().toUpperCase()).saleDetailsList(saleDetailsList).cashierName(sale.getCashierName().toUpperCase()).customerName(sale.getCustomer() != null ? sale.getCustomer().getName().toUpperCase() : null).paymentDescription(sale.getPaymentDescription()).addedPoints(addedPoints.get()).totalPoints(sale.getCustomer() != null ? sale.getCustomer().getTotalPoints() : null).rePrinted(false).build();
+        InvoiceDTO invoiceDTO = InvoiceDTO.builder().saleId(sale.getSaleId().toUpperCase()).saleDetailsList(saleDetailsList).cashierName(sale.getCashierName().toUpperCase()).customerName(sale.getCustomer() != null ? sale.getCustomer().getCustomerName().toUpperCase() : null).paymentDescription(sale.getPaymentDescription()).addedPoints(addedPoints.get()).totalPoints(sale.getCustomer() != null ? sale.getCustomer().getTotalPoints() : null).rePrinted(false).build();
         byte[] invoice = invoiceUtil.getInvoice(invoiceDTO);
         String s = base64Encoder.encodePdf(invoice);
         logger.info("Sale request completed {}", sale.getSaleId());
