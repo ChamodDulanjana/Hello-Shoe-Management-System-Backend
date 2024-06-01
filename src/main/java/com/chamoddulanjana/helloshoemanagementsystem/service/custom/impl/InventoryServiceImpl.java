@@ -164,7 +164,7 @@ public class InventoryServiceImpl implements InventoryService {
     @Override
     public InventoryDTO getItem(String id) {
         logger.info("Get Item Request: {}", id);
-        InventoryEntity item = inventoryDao.findByAvailabilityAndItemId(true, id).orElseThrow(() -> new NotFoundException("Item Not Found"));
+        InventoryEntity item = inventoryDao.findByAvailabilityAndItemCode(true, id).orElseThrow(() -> new NotFoundException("Item Not Found"));
         return InventoryDTO
                 .builder()
                 .itemCode(item.getItemCode())

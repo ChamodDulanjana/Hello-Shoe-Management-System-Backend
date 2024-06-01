@@ -17,5 +17,5 @@ public interface InventoryDao extends JpaRepository<InventoryEntity, String> {
 
     Page<InventoryEntity> findByAvailability(Boolean availability, Pageable pageable);
 
-    Optional<InventoryEntity> findByAvailabilityAndItemId(Boolean availability, String itemId);
+    Optional<InventoryEntity> findByAvailabilityAndItemCode(Boolean availability, String itemId);
 }
