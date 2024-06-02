@@ -2,7 +2,7 @@
 This is a simple back-end application that uses the Shoes API to get the list of shoes and their details. The application is built using Spring Boot.
 
 ## Technologies
-- Java 17
+- Java 21
 - Spring Boot
 - Maven
 
@@ -21,3 +21,5 @@ This is a simple back-end application that uses the Shoes API to get the list of
 4. Access the application on `http://localhost:8080`
 
 ## Usage
+
+
